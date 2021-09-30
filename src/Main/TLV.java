@@ -7,7 +7,7 @@ public class TLV {
 	public String Tag;
 	public String Length;
 	public String[] Value;
-	public TLV[] innerTLV;
+//	public TLV[] innerTLV;
 	
 	public int grade;
 	public int startPoint;
