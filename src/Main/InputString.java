@@ -9,7 +9,12 @@ public class InputString {
 	public void init(String input) {
 		
 		input = inputString(input);
-		
+		if(input == null) {
+			System.out.println(" wrong struct message | length is can not divide 2");
+		}
+
+		System.out.println( " input remove space : " + input);
+
 		initStr(input, hexStrArr);
 		
 //		for( String str : hexStrArr) {
@@ -29,7 +34,7 @@ public class InputString {
 //			e.printStackTrace();
 //		}
 		
-		ValueDecode.decoding( hexStrArr, 0, 0, hexStrArr.length-1);
+		ValueDecode.decoding( hexStrArr, 0, 0, hexStrArr.length);
 		
 	}
 	
@@ -39,7 +44,7 @@ public class InputString {
 
 		if(hexCode.length() % 2 != 0 ) {
 			System.out.println("Hexcode length is can't divide to 2 ");
-			return hexCode;
+			return null;
 		}
 		
 		int length = hexCode.length() / 2;

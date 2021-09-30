@@ -68,6 +68,7 @@ public class ByteToHex {
 	
 
 	public static int hexToInt(String hexbyte) {
+		if( hexbyte == null) {return 0;}
 		int returnVal = Integer.parseInt(hexbyte , 16);
 		
 		return returnVal;
