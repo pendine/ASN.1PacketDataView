@@ -74,8 +74,13 @@ public class ByteToHex {
 		return returnVal;
 	}
 	
-	public static int byteToInt(byte bit) {
+	public static int byteToUnsignedInt(byte bit) {
 		int returnVal = (int) (0xff & bit);
+		return returnVal;
+	}
+	
+	public static long byteToUnsignedLong(byte bit) {
+		long returnVal = (long) (0xff & bit);
 		return returnVal;
 	}
 	
@@ -95,34 +100,56 @@ public class ByteToHex {
 		return Integer.toHexString( integer );
 	}
 	
-	public static int bytesToInt(byte[] bytes) {
+	public static int bytesToUnsignedInt(byte[] bytes) {
 		byte[] aaa = new byte[4];
-		int s1=0;
-        int s2=0;
-        int s3=0;
-        int s4=0;
-		if(bytes.length == 4) {
-			for(int i=0; i < aaa.length; i++) {
-				if(bytes.length - 1 - i >=0) {
-				aaa [aaa.length-1 - i] = bytes[bytes.length - 1 - i];
-				}else {
-					aaa [aaa.length-1 - i] = 0;
-				}
-
-		         s1 = aaa[0] & 0xFF;
-		         s2 = aaa[1] & 0xFF;
-		         s3 = aaa[2] & 0xFF;
-		         s4 = aaa[3] & 0xFF;
-		    
-			}
-		}else if (bytes.length == 2) {
-			 s1 = 0;
-			 s2 = 0;
-	         s3 = bytes[0] & 0xFF;
-	         s4 = bytes[1] & 0xFF;
+		
+		int returnVal = 0;
+		
+		if(bytes.length > 4 ) {
+			System.out.println( "Byte Array Length is over than 4 | Check Bytes Array | Byte Array Length : " + bytes.length );
+			return 0;
 		}
-				
-        return ((s1 << 24) + (s2 << 16) + (s3 << 8) + (s4 << 0));
+		else if( bytes.length < 1 ) {
+			System.out.println( "Byte Array Length is low than 1 | Check Bytes Array | Byte Array Length : " + bytes.length );
+			return 0;
+		}
+		
+		for( int i = bytes.length - 1 ; i >= 0 ; i-- ) 
+		{
+			int tmp = ( byteToUnsignedInt( bytes[i] )) << ( 8 * ( bytes.length - i )  - 8 ) ;
+			returnVal = returnVal + ( tmp ) ;
+//			System.out.println( " bytes 배열 : " + i + "번째 요소 치환됨 => " + tmp + " 누적 결과 : " + returnVal );
+//			System.out.println( " 8 * ( bytes.length - i ) : " + 8 * ( bytes.length - i ) );
+//			System.out.println( " ( 8 * ( bytes.length - i )  - 8 ) " + ( 8 * ( bytes.length - i )  - 8 ) ); 
+		}
+		
+        return returnVal;
+	}
+	
+	public static long bytesToUnsignedLong(byte[] bytes) {
+		byte[] aaa = new byte[8];
+		
+		long returnVal = 0;
+		
+		if(bytes.length > 8 ) {
+			System.out.println( "Byte Array Length is over than 8 | Check Bytes Array | Byte Array Length : " + bytes.length );
+			return 0;
+		}
+		else if( bytes.length < 1 ) {
+			System.out.println( "Byte Array Length is low than 1 | Check Bytes Array | Byte Array Length : " + bytes.length );
+			return 0;
+		}
+		
+		for( int i = bytes.length - 1 ; i >= 0 ; i-- ) 
+		{
+			long tmp = ( byteToUnsignedLong( bytes[i] ) << ( 8 * ( bytes.length - i )  - 8 ) ) ;
+			returnVal = returnVal + tmp;  
+//			System.out.println( " bytes 배열 : " + i + "번째 요소 치환전 : "+ byteToUnsignedLong( bytes[i] ) + " 치환 후 :  " + tmp + " 누적 결과 : " + returnVal );
+//			System.out.println( " 8 * ( bytes.length - i ) : " + 8 * ( bytes.length - i ) );
+//			System.out.println( " ( 8 * ( bytes.length - i )  - 8 ) " + ( 8 * ( bytes.length - i )  - 8 ) );
+		}
+		
+        return returnVal;
 	}
 	
 	public static int bytesToOffset(byte[] bytes) {

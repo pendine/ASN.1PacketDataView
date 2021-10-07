@@ -5,7 +5,7 @@ import util.ByteToHex;
 public class ValueDecode {
 	
 	public static void decoding(String[] strArr, int grade , int startPoint , int endPoint) {
-
+/*
 		while(true) {
 			System.out.println("디코딩에서 새로운 TLV 객체 생성시 깊이 : " + grade + " 배열 총 길이 : "+ strArr.length +" 시작위치 : " + startPoint);
 			int length = ByteToHex.hexToInt( strArr[ startPoint+1] );
@@ -38,6 +38,8 @@ public class ValueDecode {
 			
 			
 		}
+		
+		*/
 		
 	}
 

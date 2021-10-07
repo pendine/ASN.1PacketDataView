@@ -1,45 +1,42 @@
 package Main;
 
+import util.ByteToHex;
 
 public class ASN_VIEW_Main {
 	// Encoding : BER 
 	public static void main(String[] args) {
-		InputString test = new InputString();
 
-		String TestStr;
+		byte[] byteArray = { /* (byte) 0x00,(byte) 0xff, */ (byte) 0x00 , (byte) 0x00,  (byte) 0xff,  (byte) 0x12, (byte) 0xa2 , (byte) 0xff };
+//		byte[] byteArray = { (byte) 0x00,  (byte) 0x12, (byte) 0xa2 , (byte) 0xff };
 		
-//		String TestStr = "30 45 80 01 01 81 3C 30 3A 80 01 03 81 03 01 F8 AF "
-//				+ "82 01 01 A3 28 81 00 83 00 85 00 A7 20 80 02 07 E2 81 01 "
-//				+ "01 82 01 02 83 01 00 84 01 00 85 01 09 A6 03 82 01 00 A7 "
-//				+ "06 80 01 F7 81 01 00 A4 03 82 01 00 82 02 A6 C5";
+		String packetStr = "305E800101815530538000810101820100A300A447A245800"
+				+ "C544553545F434C49454E5400810C544553545"
+				+ "F534552564552008209746573745F757365728309746573745"
+				+ "F70617373A4040602510185012886010A8701018802100082028E80";
 		
+		byteArray = new byte[packetStr.length() / 2];
 		
-		/*
-		 * String TestStr = "3045800101813C303A800103810301F8AF820101A328810083008500" +
-		 * "A720800207E2810101820102830100840100850109A603820100" +
-		 * "A7068001F7810100A4038201008202A6C5";
-		 */
+		String[] tmp = new String[ packetStr.length() / 2 ];
 		
+		StringBuilder sb = new StringBuilder();
+		for(int i=0; i < packetStr.length() / 2 ; i++ ) {
+			sb.append( packetStr.charAt( i * 2 ) );
+			sb.append( packetStr.charAt( (i * 2) + 1 ) );
+			tmp[i] = sb.toString();
+			sb.setLength(0);
+		}
 		
-//		String TestStr  = "30598001018150304E800102810100820100A31082065365727665728406436C69656E74A431A22F80065365727665728106436C69656E74820474657374830474657374A4040602510185013C860164870101880204008202B78B";
+		for(int i=0; i < tmp.length ; i ++) {
+			byteArray[i] = ByteToHex.hexToByteArray(tmp[i]);
+		}
+
+		System.out.println( "byteArray length : " + byteArray.length );
 		
-		TestStr = " 30 53 80 00 81 01 00 82 01 01 A3 00 A4 47 A2 45 "
-		+ "80 0C 54 45 53 54 5F 43 4C 49 45 4E 54 00 81 0C "
-		+ "54 45 53 54 5F 53 45 52 56 45 52 00 82 09 74 65 "
-		+ "73 74 5F 75 73 65 72 83 09 74 65 73 74 5F 70 61 "
-		+ "73 73 A4 04 06 02 51 01 85 01 28 86 01 0A 87 01 "
-		+ "01 88 02 10 00 ";
+		for( int i =0 ; i < byteArray.length; i ++ ) {
+			System.out.print( ByteToHex.byteToHex(byteArray[i]) + " ");
+		}
 		
-		TestStr = "3077800101816E306C8000810102820101A300A460A75E8001FFA159A0573055800103810100820100A34AA148800C2802831A8C9A750102030302A1383036801332303231303533313233333230312E3232325A810164A21C301A800931737420466C6F6F72810A53656374696F6E20414182015082022474";
-		System.out.println(" input Str : " + TestStr);
-		System.out.println(" input Str : " + TestStr.length()/2 );
-		test.init(TestStr);
-		
-		
-		System.out.println("확인용 내뱉기 시작");
-		System.out.println("받은 헥스코드 : " + TestStr);
-		System.out.println( InputString.grandmom.toString() );
-		System.out.println("확인용 내뱉기 끝");
+		new TLV( byteArray , 0 , 0 );
 		
 	}
 	

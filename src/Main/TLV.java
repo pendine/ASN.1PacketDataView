@@ -1,5 +1,6 @@
 package Main;
 
+import asn_enum.AsnEnum;
 import util.ByteToHex;
 
 public class TLV {
@@ -11,9 +12,12 @@ public class TLV {
 	
 	public int grade;
 	
-	public byte[] receivedBytes;
+	public byte[] received;
 	
 	private int index = 0;
+	
+//	참고했던 사이트
+//	https://luca.ntop.org/Teaching/Appunti/asn1.html
 	
 //	필수 요소값은 Tag, Length 두개.
 //	
@@ -36,19 +40,54 @@ public class TLV {
 //	
 //	만약에 태그값이 구조체라면 새로운 구조체를 생성한다.
 	
-	public TLV( byte[] receivedBytes, int grade ) {
+	public TLV( byte[] receivedBytes, int index , int grade ) {
+		this.index = index;
 		this.grade = grade;
 		
+		if( receivedBytes == null || receivedBytes.length == 0) {
+			System.out.println("내부 생성 불가능");
+			return;
+		}
+	
 		if(receivedBytes.length < 2) {
-			this.Value = receivedBytes;
+			if(receivedBytes != null) {
+				this.Value = receivedBytes;
+			}
 			return;
 		}
 		
 		setTag( receivedBytes , index );
 		setLength( receivedBytes , index );
 		
-		lengthValue = checkLength(length);
-		
+		if(AsnEnum.forValue(tag) != AsnEnum.SEQUENCE
+			&& AsnEnum.forValue(tag) != AsnEnum.SET 
+			&& this.lengthValue > 0)
+		{
+			received = new byte[this.lengthValue];
+			setValue( receivedBytes , this.lengthValue , index);
+		}
+		else 
+		{
+			System.out.println("구조체 확인 : " + AsnEnum.forValue(tag).name() );
+			received = new byte[this.lengthValue];
+			setValue( receivedBytes , lengthValue , index );
+
+			while(true) 
+			{
+//				TAG 값이 구조체일때 안에 있는 바이트배열로 새로운 객체를 생성해줘야하고
+//				새로 생성될때 생성된 객체의 길이가 구조체 범위를 벗어나지 않을때 반복하려고했는데
+//				여기서 조건을 대충 생각해서 무한루프 문제가 발생한듯.
+				TLV inner = new TLV( received , index , grade + 1 );
+				index = index + inner.getLengthInt() + 2;
+				if( inner.getLengthInt() >= getLengthInt() )
+				{
+					System.out.println(" inner Length : " + inner.getLengthInt() 
+					+ " this Length : " + getLengthInt() );
+					break;
+				}
+			}
+		}
+		getString();
 	}
 	
 	//Tag 입력, 내부인덱스 증가.
@@ -65,17 +104,36 @@ public class TLV {
 		// length 바이트의 크기가 1보다 클경우
 		// longForm에 맞게 변경해줘야함.
 		int isLongForm = checkLength(this.length);
-		if ( isLongForm > 2 ) 
+		if ( isLongForm > 1 ) 
 		{
 			byte[] lengthValue = new byte[isLongForm];
 			increaseIndex();
+			
 			for( int i = 0; i < isLongForm;  i++) {
 				lengthValue[i] = received[index];
 				increaseIndex();
 			}
-		}
 			
+			this.lengthValue = ByteToHex.bytesToUnsignedInt(lengthValue);
+		}
+		else 
+		{
+			this.lengthValue = ByteToHex.byteToUnsignedInt(length);
+		}
+		
 	}
+	
+	private void setValue( byte[] receivedArray , int length , int index ) {
+//		System.arraycopy(receivedArray, index, received , 0, length);
+		
+		for(int i=0; i < length ; i ++) 
+		{
+			received[i] = receivedArray[ i + index];
+		}
+		
+		increaseIndex( lengthValue );
+	}
+	
 	
 	private void increaseIndex() {
 		this.index += 1;
@@ -115,7 +173,7 @@ public class TLV {
 	
 	public String setGradeStr() {
 		StringBuilder sb = new StringBuilder();
-		for(int i=0; i <= this.grade; ++i) {
+		for(int i=0; i <= this.grade ; ++i) {
 			sb.append("\t");
 		}
 		
@@ -128,10 +186,12 @@ public class TLV {
 			return null;
 		}
 		
-		for(int i=0; i < Value.length; ++i) {
-			sb.append(Value[i]);
-			sb.append(" ");
-		}
+//		for(int i=0; i < Value.length; ++i) {
+//			sb.append(Value[i]);
+//			sb.append(" ");
+//		}
+		
+		sb.append( ByteToHex.bytesToHex(received) );
 		
 		return sb.toString();
 	}
