@@ -5,7 +5,6 @@ import util.ByteToHex;
 public class ASN_VIEW_Main {
 	// Encoding : BER 
 	public static void main(String[] args) {
-
 		byte[] byteArray = { /* (byte) 0x00,(byte) 0xff, */ (byte) 0x00 , (byte) 0x00,  (byte) 0xff,  (byte) 0x12, (byte) 0xa2 , (byte) 0xff };
 //		byte[] byteArray = { (byte) 0x00,  (byte) 0x12, (byte) 0xa2 , (byte) 0xff };
 		
@@ -17,6 +16,10 @@ public class ASN_VIEW_Main {
 		byteArray = new byte[packetStr.length() / 2];
 		
 		String[] tmp = new String[ packetStr.length() / 2 ];
+		
+		if( (packetStr.length() / 2 ) % 2 != 0 ) {
+			System.out.println("받은 헥스코드 문자열이 2로 나누어지지 않음. 현재 문자열 길이 : " + packetStr.length());
+		}
 		
 		StringBuilder sb = new StringBuilder();
 		for(int i=0; i < packetStr.length() / 2 ; i++ ) {
@@ -35,10 +38,10 @@ public class ASN_VIEW_Main {
 		for( int i =0 ; i < byteArray.length; i ++ ) {
 			System.out.print( ByteToHex.byteToHex(byteArray[i]) + " ");
 		}
-		
-		new TLV( byteArray , 0 , 0 );
-		
+		System.out.println("");
+		System.out.println("----------------------------------------------------");
+		new TLV2( byteArray );
+//		new TLV( byteArray , 0 , 0 );
 	}
-	
 	
 }

@@ -101,8 +101,6 @@ public class ByteToHex {
 	}
 	
 	public static int bytesToUnsignedInt(byte[] bytes) {
-		byte[] aaa = new byte[4];
-		
 		int returnVal = 0;
 		
 		if(bytes.length > 4 ) {
@@ -127,8 +125,6 @@ public class ByteToHex {
 	}
 	
 	public static long bytesToUnsignedLong(byte[] bytes) {
-		byte[] aaa = new byte[8];
-		
 		long returnVal = 0;
 		
 		if(bytes.length > 8 ) {
@@ -151,42 +147,5 @@ public class ByteToHex {
 		
         return returnVal;
 	}
-	
-	public static int bytesToOffset(byte[] bytes) {
-		byte[] aaa = new byte[4];
-		int s1=0;
-        int s2=0;
-        int s3=0;
-        int s4=0;
-		if(bytes.length == 4) {
-			for(int i=0; i < aaa.length; i++) {
-				if(bytes.length - 1 - i >=0) {
-				aaa [aaa.length-1 - i] = bytes[bytes.length - 1 - i];
-				}else {
-					aaa [aaa.length-1 - i] = 0;
-				}
-
-		         s1 = aaa[0] & 0xFF;
-		         s2 = aaa[1] & 0xFF;
-		         s3 = aaa[2] & 0xFF;
-		         s4 = aaa[3] & 0xFF;
-		    
-			}
-		}else if (bytes.length == 2) {
-			 s1 = 0;
-			 s2 = 0;
-	         s3 = bytes[1] & 0xFF;
-	         s4 = bytes[0] & 0xFF;
-		}
-				
-        return ((s1 << 24) + (s2 << 16) + (s3 << 8) + (s4 << 0));
-	}
-	
-	public static int charToInt(char bytes) {
-		return (bytes & 0xffffffff);			
-	}
-	
-	
-	
 	
 }
