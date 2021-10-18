@@ -1,5 +1,7 @@
 package Main;
 
+import java.util.ArrayList;
+
 import asn_enum.AsnEnum;
 import util.ByteToHex;
 
@@ -12,49 +14,52 @@ public class TLV2 {
 	
 	private int index = 0;
 	
+	ArrayList<TLV2> innerTLVList = new ArrayList<>();
+	
 	byte[] receive;
 	byte[] value;
 	
-	public TLV2( byte[] received ) {
+	public TLV2( byte[] received , int receivedIndex ) {
 		receive = received;
+		index = receivedIndex; 
 		
 		setTag();
 		setLength();
+		System.out.println("check length : " + lengthVal );
 		setValue();
 		
+		doIt();
 	}
 	
 	public void doIt() {
-
 		System.out.println("index : " + index );
 		
-			if(AsnEnum.forValue(tag) == AsnEnum.SEQUENCE
-				|| AsnEnum.forValue(tag) == AsnEnum.SET
-				)
-			{
-				TLV2 inner = new TLV2( value );
+		if(AsnEnum.forValue(tag) == AsnEnum.SEQUENCE
+			|| AsnEnum.forValue(tag) == AsnEnum.SET
+			)
+		{
+			while( index < receive.length ) {
+				TLV2 inner = new TLV2( receive , index);
 
-				int innerLength = inner.lengthVal;
+				int innerLength = inner.getTotalLength();
 				System.out.println("inner Length : " + innerLength );
 				index += innerLength;
 				System.out.println("now Index : " + index);
 				if( index >= receive.length ) {
 					System.out.println("끝");
-//					break;
+					break;
 				}
 				else {
 					inner.doIt();
 				}
-				
-				
 			}
 			
+		}
 		
 	}
 	
 	private void setTag(){
 		tag = receive[index];
-		System.out.println( "set Tag : " + ByteToHex.byteToHex(tag) + " Tag Name : " + AsnEnum.forValue(tag) );
 		index ++;
 	}
 	
@@ -64,7 +69,7 @@ public class TLV2 {
 		
 
 		int isLongForm = checkLength(this.length);
-		if ( isLongForm > 1 ) 
+		if ( isLongForm >= 1 ) 
 		{
 			byte[] lengthArray = new byte[isLongForm];
 			index++;
@@ -81,8 +86,6 @@ public class TLV2 {
 			lengthVal = ByteToHex.byteToUnsignedInt(length);
 		}
 
-		System.out.println("set length : " + ByteToHex.byteToHex(length) + " length Value : " + length);
-		
 	}
 
 	public int checkLength(byte length) {
@@ -97,20 +100,18 @@ public class TLV2 {
 	
 	private void setValue(){
 		value = new byte[lengthVal];
+		
 		System.arraycopy(receive, index, value, 0, lengthVal);
-		System.out.println(" Byte Array copy | target index : " + index
-						+ " copy Array Start point : "+ 0
-						+ " copy Array Last point : " + lengthVal
-						);
-		System.out.println(" Target Array : " + ByteToHex.bytesToHex(receive) );
-		System.out.println(" copy result  : " + ByteToHex.bytesToHex(value)   );
 	}
 	
 	public int getIndex() {
 		return index;
 	}
 	
-	
+	public int getTotalLength() {
+//		인덱스 값 + 길이 바이트 + 태그 길이
+		return index + 1 + ( (lengthArray == null )? 1 : lengthArray.length );
+	}
 	
 	
 }

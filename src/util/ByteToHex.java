@@ -116,9 +116,9 @@ public class ByteToHex {
 		{
 			int tmp = ( byteToUnsignedInt( bytes[i] )) << ( 8 * ( bytes.length - i )  - 8 ) ;
 			returnVal = returnVal + ( tmp ) ;
-//			System.out.println( " bytes 배열 : " + i + "번째 요소 치환됨 => " + tmp + " 누적 결과 : " + returnVal );
-//			System.out.println( " 8 * ( bytes.length - i ) : " + 8 * ( bytes.length - i ) );
-//			System.out.println( " ( 8 * ( bytes.length - i )  - 8 ) " + ( 8 * ( bytes.length - i )  - 8 ) ); 
+			System.out.println( " bytes 배열 : " + i + "번째 요소 치환됨 => " + tmp + " 누적 결과 : " + returnVal );
+			System.out.println( " 8 * ( bytes.length - i ) : " + 8 * ( bytes.length - i ) );
+			System.out.println( " ( 8 * ( bytes.length - i )  - 8 ) " + ( 8 * ( bytes.length - i )  - 8 ) ); 
 		}
 		
         return returnVal;
