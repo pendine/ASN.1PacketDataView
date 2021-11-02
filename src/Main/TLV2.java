@@ -22,12 +22,14 @@ public class TLV2 {
 	byte valueFirst;
 	
 	int grade;
+	int limit;
 	
-	public TLV2( byte[] received , int receivedIndex , int grade ) {
+	public TLV2( byte[] received , int receivedIndex , int limit , int grade ) {
 //		System.out.println(" receive index : " + receivedIndex);
 		receive = received;
 		index = receivedIndex;
-		this.grade = grade; 
+		this.grade = grade;
+		this.limit = limit;
 //		setTag();
 //		setLength();
 //		System.out.println("check length : " + lengthVal );
@@ -61,14 +63,14 @@ public class TLV2 {
 			|| AsnEnum.forValue(valueFirst) == AsnEnum.A2
 			)
 		{
-			while( index < receive.length ) {
-				TLV2 inner = new TLV2( receive , index, grade + 1);
+			while( index < lengthVal ) {
+				TLV2 inner = new TLV2( receive , index, lengthVal , grade + 1);
 				innerTLVList.add(inner);
 				inner.doIt();
 				int innerLength = inner.getTotalLength();
 //				System.out.println("inner Length : " + innerLength );
 				index += innerLength;
-				System.out.println("now Index : " + index);
+//				System.out.println("now Index : " + index);
 				if( index >= receive.length ) {
 					System.out.println("끝");
 					break;
@@ -146,7 +148,7 @@ public class TLV2 {
 	public int getTotalLength() {
 //		인덱스 값 + 길이 바이트 + 태그 길이
 		int returnVal = 1 + ( (lengthArray == null )? 1 : lengthArray.length ) + ((value==null)? 0 : value.length);
-		System.out.println(" totalLength : " + returnVal);
+//		System.out.println(" totalLength : " + returnVal);
 		return returnVal;
 	}
 	
