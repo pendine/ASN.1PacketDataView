@@ -40,7 +40,7 @@ public class ASN_VIEW_Main {
 		}
 		System.out.println("");
 		System.out.println("----------------------------------------------------");
-		new TLV2( byteArray , 0 );
+		new TLV2( byteArray , 0 , 0).doIt();
 //		new TLV( byteArray , 0 , 0 );
 	}
 	

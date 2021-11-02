@@ -75,8 +75,8 @@ public class ByteToHex {
 	}
 	
 	public static int byteToUnsignedInt(byte bit) {
-		int returnVal = (int) (0xff & bit);
-		return returnVal;
+//		int returnVal = (int) (0xff & bit);
+		return (0xff & bit);
 	}
 	
 	public static long byteToUnsignedLong(byte bit) {

@@ -21,6 +21,8 @@ public enum AsnEnum {
 	, UTF8String(0x0C, "UTF8String")
 	, SEQUENCE(0x30, "SEQUENCE (OF)")
 	, SET(0x31, "SET (OF)")
+	, A4(0xa4, "0xA4")
+	, A2(0xa2, "0xA2")
 	;
 
 	private final int value;
