@@ -152,5 +152,28 @@ public class TLV2 {
 		return returnVal;
 	}
 	
+	public String getString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append( "\n");
+		for(int i =0 ; i < grade; i ++) {
+			sb.append("\t");
+			}
+		sb.append(ByteToHex.byteToHex( tag ) + " " + ByteToHex.byteToHex( length) );
+		sb.append("\n");
+		for(int i =0 ; i < grade + 1 ; i ++) {
+		sb.append("\t");
+		}
+		sb.append( ((value == null ) ? "" : ByteToHex.bytesToHex(value)) );
+		
+		if(innerTLVList != null)
+		{
+			for(int i = 0; i < innerTLVList.size(); i ++) {
+				sb.append( innerTLVList.get(i).getString() );
+			}
+		}
+		
+		return sb.toString();
+	}
+	
 	
 }
