@@ -67,7 +67,7 @@ public class TLV2 {
 				);
 		int innerTLVStartPoint = 0;
 
-		if( innerTLVStartPoint < (( value == null ) ? -1 : value.length) ) {
+		if( innerTLVStartPoint < (( value == null ) ? 0 : value.length) ) {
 			System.out.println(" inner TLV 생성 가능 ");
 		}else {
 			System.out.println(" inner TLV 생성 불가능 ");
@@ -84,6 +84,7 @@ public class TLV2 {
 			|| isAxTag(valueFirst)
 			)
 //			&& grade < 1
+			&& TLVmake
 			)
 		{
 			while( innerTLVStartPoint < value.length ) {
@@ -96,9 +97,6 @@ public class TLV2 {
 				innerTLVList.add(inner);
 				
 				inner.doIt();
-				if(!inner.TLVmake) {
-					break;
-				}
 //				int innerLength = inner.getTotalLength();
 ////				System.out.println("inner Length : " + innerLength );
 //				index += innerLength;
