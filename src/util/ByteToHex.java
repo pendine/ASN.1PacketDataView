@@ -104,21 +104,22 @@ public class ByteToHex {
 		int returnVal = 0;
 		
 		if(bytes.length > 4 ) {
-			System.out.println( "Byte Array Length is over than 4 | Check Bytes Array | Byte Array Length : " + bytes.length );
+//			System.out.println( "Byte Array Length is over than 4 | Check Bytes Array | Byte Array Length : " + bytes.length );
 			return 0;
 		}
 		else if( bytes.length < 1 ) {
-			System.out.println( "Byte Array Length is low than 1 | Check Bytes Array | Byte Array Length : " + bytes.length );
+//			System.out.println( "Byte Array Length is low than 1 | Check Bytes Array | Byte Array Length : " + bytes.length );
 			return 0;
 		}
 		
 		for( int i = bytes.length - 1 ; i >= 0 ; i-- ) 
 		{
+//			System.out.println(" index : " + i + " | hex : " + byteToHex( bytes[i] ) + " | byte print : " + bytes[i] );
 			int tmp = ( byteToUnsignedInt( bytes[i] )) << ( 8 * ( bytes.length - i )  - 8 ) ;
 			returnVal = returnVal + ( tmp ) ;
-			System.out.println( " bytes 배열 : " + i + "번째 요소 치환됨 => " + tmp + " 누적 결과 : " + returnVal );
-			System.out.println( " 8 * ( bytes.length - i ) : " + 8 * ( bytes.length - i ) );
-			System.out.println( " ( 8 * ( bytes.length - i )  - 8 ) " + ( 8 * ( bytes.length - i )  - 8 ) ); 
+//			System.out.println( " bytes 배열 : " + i + "번째 요소 치환됨 => " + tmp + " 누적 결과 : " + returnVal );
+//			System.out.println( " 8 * ( bytes.length - i ) : " + 8 * ( bytes.length - i ) );
+//			System.out.println( " ( 8 * ( bytes.length - i )  - 8 ) " + ( 8 * ( bytes.length - i )  - 8 ) ); 
 		}
 		
         return returnVal;

@@ -8,43 +8,30 @@ public class ASN_VIEW_Main {
 		byte[] byteArray = { /* (byte) 0x00,(byte) 0xff, */ (byte) 0x00 , (byte) 0x00,  (byte) 0xff,  (byte) 0x12, (byte) 0xa2 , (byte) 0xff };
 //		byte[] byteArray = { (byte) 0x00,  (byte) 0x12, (byte) 0xa2 , (byte) 0xff };
 		
-		String packetStr = "305E800101815530538000810101820100A300A447A245800"
-				+ "C544553545F434C49454E5400810C544553545"
-				+ "F534552564552008209746573745F757365728309746573745"
-				+ "F70617373A4040602510185012886010A8701018802100082028E80";
+		String packetStr;
 		
-		byteArray = new byte[packetStr.length() / 2];
+//		packetStr = "305E800101815530538000810101820100A300A447A245800"
+//				+ "C544553545F434C49454E5400810C544553545"
+//				+ "F534552564552008209746573745F757365728309746573745"
+//				+ "F70617373A4040602510185012886010A8701018802100082028E80";
 		
-		String[] tmp = new String[ packetStr.length() / 2 ];
 		
-		if( (packetStr.length() / 2 ) % 2 != 0 ) {
-			System.out.println("받은 헥스코드 문자열이 2로 나누어지지 않음. 현재 문자열 길이 : " + packetStr.length());
-		}
+		packetStr = "308201C1800101818201B6308201B2800157810104820100A341810D343235323436646A3030323933830D343235323436646A3030323933A721800207E581010B"
+				+ "82011883010B840101850111A604820202CEA706800109810100A4820162A682015E8001FFA1820157A08201533082014F8001028101038201FFA3820142A182013E"
+				+ "800628FB28040007A18201323082012E3082012A800102818201233082011F800D30303030303030303030303031810167A4820109800103810100820E3230323131"
+				+ "313234313130313137A381F0300D80010081080000012203025141300D80010081080000012203025142300D80010081080000012203025143300D80010081080000"
+				+ "012203025144300D80010081080000012203025145300D80010081080000012203025146300D80010081080000012203025147300D80010081080000012203025148"
+				+ "300D80010081080000012203025149300D80010081080000012203025150300D80010081080000012203025175300D80010081080000012203025176300D80010081"
+				+ "080000012203025177300D80010081080000012203025178300D80010081080000012203025179300D80010081080000012203025180820295D0"
+				;
+		byteArray = new ByteArrayBuildHelper().stringToByteArray(packetStr);
 		
-		StringBuilder sb = new StringBuilder();
-		for(int i=0; i < packetStr.length() / 2 ; i++ ) {
-			sb.append( packetStr.charAt( i * 2 ) );
-			sb.append( packetStr.charAt( (i * 2) + 1 ) );
-			tmp[i] = sb.toString();
-			sb.setLength(0);
-		}
-		
-		for(int i=0; i < tmp.length ; i ++) {
-			byteArray[i] = ByteToHex.hexToByteArray(tmp[i]);
-		}
-
-		System.out.println( "byteArray length : " + byteArray.length );
-		
-		for( int i =0 ; i < byteArray.length; i ++ ) {
-			System.out.print( ByteToHex.byteToHex(byteArray[i]) + " ");
-		}
-		System.out.println("");
-		System.out.println("----------------------------------------------------");
 		TLV2 tlv2 = new TLV2( byteArray , 0 , byteArray.length , 0);
 		tlv2.doIt();
 		
 		System.out.println( tlv2.getString() ); 
+		
 //		new TLV( byteArray , 0 , 0 );
 	}
-	
+
 }
