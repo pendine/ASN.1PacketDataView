@@ -66,8 +66,15 @@ public class TLV2 {
 						 
 				);
 		int innerTLVStartPoint = 0;
+		
+		if(value == null || value.length < 3) {
+			System.out.println(" value 가 null 이거나 length 가 3보다 짧음. TLV 생성 불가능 :: value : " 
+						+ (( value == null ) ? 0 : value.length) 
+					);
+			return;
+		}
 
-		if( innerTLVStartPoint < (( value == null ) ? 0 : value.length) ) {
+		if( innerTLVStartPoint < value.length ) {
 			System.out.println(" inner TLV 생성 가능 ");
 		}else {
 			System.out.println(" inner TLV 생성 불가능 ");
@@ -97,6 +104,15 @@ public class TLV2 {
 				innerTLVList.add(inner);
 				
 				inner.doIt();
+				
+				//여기가 문제임.
+				//이부분이 주석처리되면 Value 시작이 30일때 문제가 생기고
+				//이부분이 주석해제되면 value 안에 여러 TLV구조체가 있는경우 중간에 하나의 TLV중 length가 0일때 그 이후에 먹통이 됨
+				if( !inner.TLVmake ) {
+					break;
+				}
+				
+				
 //				int innerLength = inner.getTotalLength();
 ////				System.out.println("inner Length : " + innerLength );
 //				index += innerLength;
@@ -184,11 +200,11 @@ public class TLV2 {
 //		내부 TLV 에 전달할 내용에 3030인것들이 있음. 이럴때 구조체와 같은 값으로 인해 오류가 발생해서
 //		길이를 확인했을때 받은것배열보다, 확인된 길이값이 길때 취소해야함.  
 //		헤더 + 길이 
-//		if(lengthVal + 1 + ((lengthArray==null)? 0 : lengthArray.length)> receive.length ) {
-//			System.out.println("확인한 길이가 받은 길이보다 긺. 취소 | 확인된 길이 : " + lengthVal 
-//					+ " 받은 배열 길이 : " + receive.length );
-//			return;
-//		}
+		if(lengthVal + 1 + ((lengthArray==null)? 0 : lengthArray.length)> receive.length ) {
+			System.out.println("확인한 길이가 받은 길이보다 긺. 취소 | 확인된 길이 : " + lengthVal 
+					+ " 받은 배열 길이 : " + receive.length );
+			TLVmake = false;
+		}
 
 	}
 	
@@ -230,7 +246,6 @@ public class TLV2 {
 		else
 		{
 			value = null;
-			TLVmake = false;
 		}
 	}
 	
@@ -240,14 +255,14 @@ public class TLV2 {
 	
 	public int getTotalLength() {
 //		인덱스 값 + 길이 바이트 + 태그 길이
-//		길이 반환 = ( 기본 바이트 태그, 길이 -> T,L = 1 기본 고정)
-//		가변 가능성 = ( 롱폼에 따른 L의 길이와, V의 길이 )
+//		길이 반환 = ( ( 기본 바이트 태그, 길이 -> T,L = 1 기본 고정)
+//					  가변 가능성 = ( 롱폼에 따른 L의 길이와, V의 길이 ) )
 		int returnVal = 2 
 				+ ( (lengthArray == null )? 0 : lengthArray.length ) 
-				+ ((value==null)? 0 : value.length);
+				+ ( (value==null)? 0 : value.length );
 		System.out.println(" tag byte : " + 1 + " length byte : " + 1 
 				+ " length Array size : " + ( (lengthArray == null )? 0 : lengthArray.length ) 
-				+ " value Array size : " + ((value==null)? 0 : value.length)
+				+ " value Array size : " + ( (value==null)? 0 : value.length)
 				+ " totalLength : " + returnVal);
 		return returnVal;
 	}
