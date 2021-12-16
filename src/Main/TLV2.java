@@ -47,7 +47,7 @@ public class TLV2 {
 		setLength();
 //		System.out.println("length Byte : " + );;
 //		System.out.println("check length : " + lengthVal );
-		if(lengthVal + 1 + ((lengthArray==null)? 0 : lengthArray.length)> receive.length ) {
+		if(lengthVal + 1 + ((lengthArray==null)? 0 : lengthArray.length) > ((receive == null)? -1 : receive.length) ) {
 			System.out.println("확인한 길이가 받은 길이보다 긺. 취소 | 확인된 길이 : " + lengthVal 
 					+ " 받은 배열 길이 : " + receive.length );
 			TLVmake = false;
@@ -67,8 +67,10 @@ public class TLV2 {
 				);
 		int innerTLVStartPoint = 0;
 
-		if( innerTLVStartPoint < value.length ) {
+		if( innerTLVStartPoint < (( value == null ) ? -1 : value.length) ) {
 			System.out.println(" inner TLV 생성 가능 ");
+		}else {
+			System.out.println(" inner TLV 생성 불가능 ");
 		}
 		
 		
@@ -230,7 +232,7 @@ public class TLV2 {
 		else
 		{
 			value = null;
-			
+			TLVmake = false;
 		}
 	}
 	
