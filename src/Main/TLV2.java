@@ -204,6 +204,7 @@ public class TLV2 {
 			System.out.println("확인한 길이가 받은 길이보다 긺. 취소 | 확인된 길이 : " + lengthVal 
 					+ " 받은 배열 길이 : " + receive.length );
 			TLVmake = false;
+			return;
 		}
 
 	}
@@ -273,10 +274,10 @@ public class TLV2 {
 		for(int i =0 ; i < grade; i ++) {
 			sb.append("\t");
 			}
-		sb.append(ByteToHex.byteToHex( tag ) + " " + ByteToHex.byteToHex( length) );
+		sb.append(ByteToHex.byteToHex( tag ) + " " + ByteToHex.byteToHex( length) + "  " );
 		sb.append("\n");
 		for(int i =0 ; i < grade + 1 ; i ++) {
-		sb.append("\t");
+			sb.append("\t");
 		}
 		sb.append( ((value == null ) ? "" : ByteToHex.bytesToHex(value)) );
 		
