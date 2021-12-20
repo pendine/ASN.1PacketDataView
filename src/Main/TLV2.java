@@ -51,6 +51,9 @@ public class TLV2 {
 			System.out.println("확인한 길이가 받은 길이보다 긺. 취소 | 확인된 길이 : " + lengthVal 
 					+ " 받은 배열 길이 : " + receive.length );
 			TLVmake = false;
+			tag = 0;
+			length = 0;
+			value = receive;
 			return;
 		}
 		setValue();
@@ -270,11 +273,38 @@ public class TLV2 {
 	
 	public String getString() {
 		StringBuilder sb = new StringBuilder();
+		
+		if(//lengthVal < value.length
+				lengthVal < receive.length
+				&& !TLVmake 
+				) 
+		{
+			return "";
+		}
+		if(tag == 0 && length == 0) {
+			return "";
+		}
+		
 		sb.append( "\n");
 		for(int i =0 ; i < grade; i ++) {
 			sb.append("\t");
 			}
 		sb.append(ByteToHex.byteToHex( tag ) + " " + ByteToHex.byteToHex( length) + "  " );
+		if(lengthArray != null) {
+			sb.append("");
+			for(int i = 0 ; i < lengthArray.length; i ++) {
+				sb.append( ByteToHex.byteToHex(lengthArray[i]) + " ");
+			}
+		}
+
+		sb.append(" (" + lengthVal + ")  ");
+		if(//lengthVal < value.length
+				lengthVal < receive.length
+				&& !TLVmake 
+				) 
+		{
+			sb.append("잘못됨");
+		}
 		sb.append("\n");
 		for(int i =0 ; i < grade + 1 ; i ++) {
 			sb.append("\t");
